@@ -1,0 +1,70 @@
+\section*{\Large{Реализация}}
+\addcontentsline{toc}{section}{Реализация}
+
+При реализации описанной архитектуры была получена следующая структура проекта.
+\dirtree{%
+.1 /.
+.2 app.
+.3 api.
+.4 \_\_init\_\_.py.
+.4 contexts.py.
+.4 controller.py.
+.4 model.py.
+.4 responses.py.
+.4 views.py.
+.3 domain.
+.4 \_\_init\_\_.py.
+.4 cache\_storage.py.
+.4 data\_provider.py.
+.4 model.py.
+.4 renderer.py.
+.4 repository.py.
+.3 execution.
+.4 \_\_init\_\_.py.
+.4 executor.py.
+.4 handler.py.
+.4 listener.py.
+.4 queue.py.
+.4 result.py.
+.4 storage.py.
+.3 repository.
+.4 \_\_init\_\_.py.
+.4 cache\_storage.py.
+.4 data\_provider.py.
+.4 renderer.py.
+.4 repository.py.
+.3 \_\_init\_\_.py.
+.3 app.py.
+.3 exceptions.py.
+.3 logger.py.
+.2 Dockerfile.
+.2 README.md.
+.2 main.py.
+.2 requirements.txt.
+}
+
+Само приложение находится в директории \textbf{app}.
+Всего получилось 4 python-пакета, в которых и скрыта основная логика работы.
+\begin{enumerate}
+    \item \textbf{api} -- реализует API тайлового сервера через HTTP. То есть endpoint-ы,
+    модели запросов/ответов к серверу, а также взаимодействие с \textit{ITilesRepository}
+    \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
+    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__classes-diagram}). Непосредственная
+    реализация обозначенных интерфейсов находится в других пакетах.
+    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за рендеринг в отдельном процессе.
+    Рендеринг является CPU-bound задачей, поэтому правильнее
+    запускать его через отдельный процесс, чтобы он не воздействовал на главный процесс приложения.
+    \item \textbf{repository} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
+\end{enumerate}
+
+\section*{\Large{Примеры кода}}
+\addcontentsline{toc}{section}{Примеры кода}
+
+\begin{lstlisting}[language=Python, caption=main.py, captionpos=b]
+from app import startup_app
+
+if __name__ == '__main__':
+    from aiohttp import web
+
+    web.run_app(startup_app(), host="0.0.0.0", port=8080)
+\end{lstlisting}
