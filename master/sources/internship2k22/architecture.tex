@@ -1,7 +1,7 @@
 \section*{\large{Архитектура сервиса}}
 \addcontentsline{toc}{section}{Архитектура сервиса}
 
-На диаграмме размещения(см. рис\ \ref{pic:architecture__deployment-diagram}) расчетный модуль выделен синим цветом.
+На диаграмме размещения(см. рис\ \ref{pic:architecture__deployment-diagram}) расчетный сервис выделен голубым цветом.
 \begin{figure}[H]
 	\hspace*{-1 cm}\includegraphics[width=\textwidth]{images/architecture/deployment_diagram}
 	\caption{Диаграмма размещения}
@@ -9,14 +9,13 @@
 \end{figure}
 \vskip 5 mm
 
+Расчетный сервис представлен двумя компонентами: API, расчётным модулем и математической библиотекой \textbf{nd\_plan}.
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{images/architecture/}
-	\caption{Диаграмма классов}
-	\label{pic:architecture__classes-diagram}
+	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{images/architecture/execution_classes_diagram}
+	\caption{Диаграмма классов расчетного модуля}
+	\label{pic:architecture__execution-classes-diagram}
 \end{figure}
-
-
 
 \vskip 5 mm
 Основное ядро бизнес-логики проекта представлено на диаграмме классов(см. рис\ \ref{pic:architecture__classes-diagram}).
@@ -34,3 +33,10 @@
 	\item \textbf{TileConfiguration} -- хранит в себе параметры слоев, которые требуется получить из источника данных.
 	\item \textbf{MapboxVectorTile} -- хранит в себе данные, соответствующие спецификации \textit{Mapbox Vector Tile 2.1}.
 \end{enumerate}
+
+
+\begin{figure}[H]
+	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{images/architecture/}
+	\caption{Диаграмма классов API}
+	\label{pic:architecture__api-classes-diagram}
+\end{figure}
