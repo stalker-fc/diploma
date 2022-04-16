@@ -2,44 +2,44 @@
 \addcontentsline{toc}{section}{Реализация}
 
 При реализации описанной архитектуры была получена следующая структура проекта.
-\dirtree{
+\dirtree{%
 .1 /.
-.2 app
-.3 api
-.4 __init__.py
-.4 controller.py
-.4 exception_handlers.py
-.4 middlewares.py
-.4 model.py
-.4 responses.py
-.4 serialization.py
-.4 views.py
-.3 data
-.4 mappers
-.5 services
-.6 ...
-.5 __init__.py
-.5 registry.py
-.5 utils.py
-.4 __init__.py
-.4 data_manager.py
-.4 features_registry.py
-.4 repository.py
-.4 storage.py
-.3 domain
-.4 __init__.py
-.4 listener.py
-.4 model.py
-.4 queue.py
-.4 repository.py
-.3 execution
-.4 __init__.py
-.4 executor.py
-.4 handler.py
-.4 listener.py
-.4 queue.py
-.4 storage.py
-.3 __init__.py.
+.2 app.
+.3 api.
+.4 \_\_init\_\_.py.
+.4 controller.py.
+.4 exception\_handlers.py.
+.4 middlewares.py.
+.4 model.py.
+.4 responses.py.
+.4 serialization.py.
+.4 views.py.
+.3 data.
+.4 mappers.
+.5 services.
+.6 services mappings implementations.
+.5 \_\_init\_\_.py.
+.5 registry.py.
+.5 utils.py.
+.4 \_\_init\_\_.py.
+.4 data\_manager.py.
+.4 features\_registry.py.
+.4 repository.py.
+.4 storage.py.
+.3 domain.
+.4 \_\_init\_\_.py.
+.4 listener.py.
+.4 model.py.
+.4 queue.py.
+.4 repository.py.
+.3 execution.
+.4 \_\_init\_\_.py.
+.4 executor.py.
+.4 handler.py.
+.4 listener.py.
+.4 queue.py.
+.4 storage.py.
+.3 \_\_init\_\_.py.
 .3 app.py.
 .3 exceptions.py.
 .3 logger.py.
@@ -52,15 +52,14 @@
 Само приложение находится в директории \textbf{app}.
 Всего получилось 4 python-пакета, в которых и скрыта основная логика работы.
 \begin{enumerate}
-    \item \textbf{api} -- реализует API тайлового сервера через HTTP. То есть endpoint-ы,
-    модели запросов/ответов к серверу, а также взаимодействие с \textit{ITilesRepository}
-    \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
-    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__classes-diagram}). Непосредственная
+    \item \textbf{api} -- реализует API сервисы через HTTP. То есть endpoint-ы,
+    модели запросов/ответов к серверу, а также взаимодействие с \textit{ITaskRepository} и \textit{ITaskDataManager}
+    \item \textbf{data} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
+    \item \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
+    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__execution-classes-diagram}). Непосредственная
     реализация обозначенных интерфейсов находится в других пакетах.
-    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за рендеринг в отдельном процессе.
-    Рендеринг является CPU-bound задачей, поэтому правильнее
-    запускать его через отдельный процесс, чтобы он не воздействовал на главный процесс приложения.
-    \item \textbf{repository} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
+    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за запуск математических методов
+    в отдельном процессе.
 \end{enumerate}
 
 \section*{\Large{Примеры кода}}
