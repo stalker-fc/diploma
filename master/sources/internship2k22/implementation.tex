@@ -1,0 +1,267 @@
+\section*{\Large{Реализация}}
+\addcontentsline{toc}{section}{Реализация}
+
+При реализации описанной архитектуры была получена следующая структура проекта.
+\dirtree{
+.1 /.
+.2 app
+.3 api
+.4 __init__.py
+.4 controller.py
+.4 exception_handlers.py
+.4 middlewares.py
+.4 model.py
+.4 responses.py
+.4 serialization.py
+.4 views.py
+.3 data
+.4 mappers
+.5 services
+.6 ...
+.5 __init__.py
+.5 registry.py
+.5 utils.py
+.4 __init__.py
+.4 data_manager.py
+.4 features_registry.py
+.4 repository.py
+.4 storage.py
+.3 domain
+.4 __init__.py
+.4 listener.py
+.4 model.py
+.4 queue.py
+.4 repository.py
+.3 execution
+.4 __init__.py
+.4 executor.py
+.4 handler.py
+.4 listener.py
+.4 queue.py
+.4 storage.py
+.3 __init__.py.
+.3 app.py.
+.3 exceptions.py.
+.3 logger.py.
+.2 Dockerfile.
+.2 README.md.
+.2 main.py.
+.2 requirements.txt.
+}
+
+Само приложение находится в директории \textbf{app}.
+Всего получилось 4 python-пакета, в которых и скрыта основная логика работы.
+\begin{enumerate}
+    \item \textbf{api} -- реализует API тайлового сервера через HTTP. То есть endpoint-ы,
+    модели запросов/ответов к серверу, а также взаимодействие с \textit{ITilesRepository}
+    \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
+    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__classes-diagram}). Непосредственная
+    реализация обозначенных интерфейсов находится в других пакетах.
+    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за рендеринг в отдельном процессе.
+    Рендеринг является CPU-bound задачей, поэтому правильнее
+    запускать его через отдельный процесс, чтобы он не воздействовал на главный процесс приложения.
+    \item \textbf{repository} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
+\end{enumerate}
+
+\section*{\Large{Примеры кода}}
+\addcontentsline{toc}{section}{Примеры кода}
+
+\begin{lstlisting}[language=Python, caption=main.py, captionpos=b]
+from app import startup_app
+import uvicorn
+
+if __name__ == '__main__':
+    app = startup_app()
+    uvicorn.run(app, host="0.0.0.0", port=8080)
+\end{lstlisting}
+
+\vskip 10 mm
+\begin{lstlisting}[caption=Dockerfile, captionpos=b]]
+FROM python:3.8@sha256:4c4e6735f46e7727965d1523015874ab08f71377b3536b8789ee5742fc737059
+
+WORKDIR /app
+
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV N_WORKERS 8
+
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+RUN pip3 check
+
+COPY main.py .
+
+COPY /app ./app
+
+ENTRYPOINT /bin/bash -c "gunicorn run_app:app --workers=${N_WORKERS} --bind 0.0.0.0:8080 --worker-class aiohttp.GunicornWebWorker --timeout 0"
+\end{lstlisting}
+
+\vskip 10 mm
+\begin{lstlisting}[language=Python, caption=domain/model.py, captionpos=b]
+from dataclasses import dataclass
+from enum import Enum
+from typing import Optional
+from uuid import UUID
+
+from dataclasses_json import dataclass_json
+
+from nd_plan.interfaces import MethodName
+
+
+class TaskStatus(Enum):
+    CREATED = "CREATED"
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    CANCELLED = "CANCELLED"
+    SUCCESS = "SUCCESS"
+    FAILURE = "FAILURE"
+
+
+@dataclass_json
+@dataclass
+class Task:
+    task_id: UUID
+    status: TaskStatus
+    method_name: nd_plan.MethodName
+    input_data: nd_plan.InputDataType
+    configuration: Optional[nd_plan.ConfigurationType] = None
+    output_data: Optional[nd_plan.SolutionType] = None
+\end{lstlisting}
+
+\vskip 10 mm
+
+\begin{lstlisting}[language=Python, caption=execution/listener.py, captionpos=b]
+import asyncio
+import time
+from dataclasses import dataclass
+from typing import List
+from uuid import UUID
+
+from app.domain.listener import ITaskQueueListener
+from app.domain.model import TaskStatus
+from app.domain.queue import ITaskQueue
+from app.domain.repository import ITaskRepository
+from app.execution.executor import ExecutionConfig
+from app.execution.executor import ExecutorExitCode
+from app.execution.handler import CancellationReason
+from app.execution.handler import TaskExecutionProcess
+from app.execution.handler import handle_task
+from app.execution.storage import build_executor_task_data_storage
+from app.logger import get_logger
+
+logger = get_logger(__name__)
+
+__all__ = [
+    "build_task_queue_listener",
+    "ListenerConfig"
+]
+
+
+@dataclass
+class ListenerConfig:
+    execution_config: ExecutionConfig
+    max_running_tasks: int = 1
+
+
+class TaskQueueListener(ITaskQueueListener):
+    def __init__(self, task_repository: ITaskRepository, task_queue: ITaskQueue, config: ListenerConfig):
+        self._task_repository = task_repository
+        self._task_queue = task_queue
+        self._config = config
+        self._executor_task_data_storage = build_executor_task_data_storage(
+            self._config.execution_config.executor_task_data_storage_config
+        )
+        self._running_tasks: List[TaskExecutionProcess] = []
+
+    async def listen(self):
+        logger.info("Task queue listener has started.")
+
+        while True:
+            if len(self._running_tasks) == 0 \
+                    or not self._task_queue.is_empty() and len(self._running_tasks) < self._config.max_running_tasks:
+                await self._acquire_task()
+
+            still_running_tasks = []
+            for task in self._running_tasks:
+                if self._task_queue.is_task_cancelled(task.task_id) and task.cancellation_reason is None:
+                    task.cancellation_reason = CancellationReason.cancelled_by_user
+                    task.process.kill()
+                    logger.info(f'Task id={task.task_id} in process pid={task.process.pid} cancelled by user.')
+
+                current_unix_time = int(time.time())
+                if current_unix_time - task.start_unix_time >= task.estimated_execution_time_sec:
+                    task.cancellation_reason = CancellationReason.cancelled_by_timeout_limit
+                    task.process.kill()
+                    logger.info(
+                        f'Task id={task.task_id} in process pid={task.process.pid} cancelled by time limit. '
+                        f'Estimated time is {task.estimated_execution_time_sec / 60} min. '
+                        f'Task run {(current_unix_time - task.start_unix_time) / 60} min.'
+                    )
+
+                if task.process.is_alive():
+                    still_running_tasks.append(task)
+
+                elif task.cancellation_reason == CancellationReason.cancelled_by_timeout_limit:
+                    await self._task_repository.set_task_status(task.task_id, TaskStatus.CANCELLED)
+                    logger.info(f'Compute of task id={task.task_id} cancelled by time limit.')
+                elif task.cancellation_reason == CancellationReason.cancelled_by_user:
+                    await self._task_repository.set_task_status(task.task_id, TaskStatus.CANCELLED)
+                    logger.info(f'Compute of task id={task.task_id} cancelled by user.')
+
+                elif task.process.exitcode == ExecutorExitCode.Ok:
+                    try:
+                        output_data = self._executor_task_data_storage.get_output_data(task.task_id, task.method_name)
+                        await self._task_repository.add_task_output_data(task.task_id, output_data)
+                        await self._task_repository.set_task_status(task.task_id, TaskStatus.SUCCESS)
+                        logger.info(f"Execution of task id=`{task.task_id}` is completed successfully.")
+                    except Exception as e:
+                        logger.info(f"Execution of task id=`{task.task_id}` is failed by I/O error: {e}.")
+                        await self._task_repository.set_task_status(task.task_id, TaskStatus.FAILURE)
+                elif task.process.exitcode == ExecutorExitCode.InternalErr:
+                    logger.info(f"Execution of task id=`{task.task_id}` is failed by internal error.")
+                    await self._task_repository.set_task_status(task.task_id, TaskStatus.FAILURE)
+                else:
+                    logger.info(f"Execution of task id=`{task.task_id}` is failed.")
+                    await self._task_repository.set_task_status(task.task_id, TaskStatus.FAILURE)
+
+            self._running_tasks = still_running_tasks
+
+            await asyncio.sleep(2.0)
+
+    async def shutdown(self):
+        for task in self._running_tasks:
+            if task.process.is_alive():
+                task.cancellation_reason = CancellationReason.cancelled_by_system_shutdown
+                task.process.kill()
+                await self._task_repository.set_task_status(task.task_id, TaskStatus.CANCELLED)
+                logger.info(f'Task id={task.task_id} in process pid={task.process.pid} cancelled by system shutdown.')
+
+    async def _acquire_task(self):
+        task_id: UUID = await self._task_queue.get()
+        logger.info(f"Received task id=`{task_id}`.")
+
+        is_task_cancelled = self._task_queue.is_task_cancelled(task_id)
+        if is_task_cancelled:
+            return
+
+        running_task = await handle_task(
+            self._task_repository,
+            self._executor_task_data_storage,
+            self._config.execution_config,
+            task_id
+        )
+        self._running_tasks.append(running_task)
+
+
+def build_task_queue_listener(
+        task_repository: ITaskRepository,
+        task_queue: ITaskQueue,
+        config: ListenerConfig
+) -> ITaskQueueListener:
+    return TaskQueueListener(
+        task_repository,
+        task_queue,
+        config
+    )
+\end{lstlisting}
