@@ -1,18 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%
-%%% Стилевой файл   %%%
+%%% РЎС‚РёР»РµРІРѕР№ С„Р°Р№Р»   %%%
 %%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Дата последнего изменения: 25.01.2014
+%%% Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РёР·РјРµРЅРµРЅРёСЏ: 25.01.2014
 %%%
-%%%   2. Посмотреть, будут ли ссылки на формулы набраны прямым
-%%%      шрифтом в теоремах и т. д.
+%%%   2. РџРѕСЃРјРѕС‚СЂРµС‚СЊ, Р±СѓРґСѓС‚ Р»Рё СЃСЃС‹Р»РєРё РЅР° С„РѕСЂРјСѓР»С‹ РЅР°Р±СЂР°РЅС‹ РїСЂСЏРјС‹Рј
+%%%      С€СЂРёС„С‚РѕРј РІ С‚РµРѕСЂРµРјР°С… Рё С‚. Рґ.
 %%%
-%%%   3. Ссылки на рисунки и таблицы сделать автоматические
+%%%   3. РЎСЃС‹Р»РєРё РЅР° СЂРёСЃСѓРЅРєРё Рё С‚Р°Р±Р»РёС†С‹ СЃРґРµР»Р°С‚СЊ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРµ
 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Подключаем необходимые пакеты %%%
+%%% РџРѕРґРєР»СЋС‡Р°РµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ РїР°РєРµС‚С‹ %%%
 \usepackage{ifthen}
 % \usepackage[cp1251]{inputenc}
 \usepackage[russian]{babel}
@@ -26,7 +26,7 @@
 \usepackage{url}
 %\usepackage{url}
 
-%\renewcommand{\thesection}{Глава \arabic{section}.}
+%\renewcommand{\thesection}{Р“Р»Р°РІР° \arabic{section}.}
 %
 %\def\theequation{\arabic{section}.\arabic{equation}}
 %\@addtoreset{equation}{section}
@@ -59,81 +59,81 @@
 
 \newcommand{\theorn}{\arabic{c_teo}}
 \newcommand{\Theorem}[2][numbered]{\par\setcounter{c_sle}{0}\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_teo}{+1}\par\textbf{Теорема\,\,\theorn.}\textit{ #2}}%
-{\par\textbf{Теорема.}\textit{ #2}}}%
+{\addtocounter{c_teo}{+1}\par\textbf{РўРµРѕСЂРµРјР°\,\,\theorn.}\textit{ #2}}%
+{\par\textbf{РўРµРѕСЂРµРјР°.}\textit{ #2}}}%
 \newcommand{\TheoremCite}[3][numbered]{\par\setcounter{c_sle}{0}\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_teo}{+1}\par\textbf{Теорема\,\,\theorn}\,\,\cite{#2}.\textit{ #3}}%
-{\par\textbf{Теорема}\,\,\cite{#2}.\textit{ #3}}}%
+{\addtocounter{c_teo}{+1}\par\textbf{РўРµРѕСЂРµРјР°\,\,\theorn}\,\,\cite{#2}.\textit{ #3}}%
+{\par\textbf{РўРµРѕСЂРµРјР°}\,\,\cite{#2}.\textit{ #3}}}%
 
 \newcommand{\lemman}{\arabic{c_lem}}
 \newcommand{\Lemma}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_lem}{+1}\par\textbf{Лемма\,\,\lemman.}\textit{ #2}}%
-{\par\textbf{Лемма.}\textit{ #2}}}%
+{\addtocounter{c_lem}{+1}\par\textbf{Р›РµРјРјР°\,\,\lemman.}\textit{ #2}}%
+{\par\textbf{Р›РµРјРјР°.}\textit{ #2}}}%
 \newcommand{\LemmaCite}[3][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_lem}{+1}\par\textbf{Лемма\,\,\lemman}\,\,\cite{#2}.\textit{ #3}}%
-{\par\textbf{Лемма}\,\,\cite{#2}.\textit{ #3}}}%
+{\addtocounter{c_lem}{+1}\par\textbf{Р›РµРјРјР°\,\,\lemman}\,\,\cite{#2}.\textit{ #3}}%
+{\par\textbf{Р›РµРјРјР°}\,\,\cite{#2}.\textit{ #3}}}%
 
 \newcommand{\hypotn}{\arabic{c_gip}}
 \newcommand{\Hypothesis}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_gip}{+1}\par\textbf{Гипотеза\,\,\hypotn.}\textit{ #2}}%
-{\par\textbf{Гипотеза.}\textit{ #2}}}%
+{\addtocounter{c_gip}{+1}\par\textbf{Р“РёРїРѕС‚РµР·Р°\,\,\hypotn.}\textit{ #2}}%
+{\par\textbf{Р“РёРїРѕС‚РµР·Р°.}\textit{ #2}}}%
 \newcommand{\HypothesisCite}[3][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_gip}{+1}\par\textbf{Гипотеза\,\,\hypotn}\,\,\cite{#2}.\textit{ #3}}%
-{\par\textbf{Гипотеза}\,\,\cite{#2}.\textit{ #3}}}%
+{\addtocounter{c_gip}{+1}\par\textbf{Р“РёРїРѕС‚РµР·Р°\,\,\hypotn}\,\,\cite{#2}.\textit{ #3}}%
+{\par\textbf{Р“РёРїРѕС‚РµР·Р°}\,\,\cite{#2}.\textit{ #3}}}%
 
 \newcommand{\staten}{\arabic{c_utv}}
 \newcommand{\Statement}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_utv}{+1}\par\textbf{Утверждение\,\,\staten.}\textit{ #2}}%
-{\par\textbf{Утверждение.}\textit{ #2}}}%
+{\addtocounter{c_utv}{+1}\par\textbf{РЈС‚РІРµСЂР¶РґРµРЅРёРµ\,\,\staten.}\textit{ #2}}%
+{\par\textbf{РЈС‚РІРµСЂР¶РґРµРЅРёРµ.}\textit{ #2}}}%
 \newcommand{\StatementCite}[3][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_utv}{+1}\par\textbf{Утверждение\,\,\staten}\,\,\cite{#2}.\textit{ #3}}%
-{\par\textbf{Утверждение}\,\,\cite{#2}.\textit{ #3}}}%
+{\addtocounter{c_utv}{+1}\par\textbf{РЈС‚РІРµСЂР¶РґРµРЅРёРµ\,\,\staten}\,\,\cite{#2}.\textit{ #3}}%
+{\par\textbf{РЈС‚РІРµСЂР¶РґРµРЅРёРµ}\,\,\cite{#2}.\textit{ #3}}}%
 
 \newcommand{\definn}{\arabic{c_opr}}
 \newcommand{\Definition}[1][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_opr}{+1}\par\textbf{Определение\,\,\definn.\,}}%
-{\par\textbf{Определение.}}}%
+{\addtocounter{c_opr}{+1}\par\textbf{РћРїСЂРµРґРµР»РµРЅРёРµ\,\,\definn.\,}}%
+{\par\textbf{РћРїСЂРµРґРµР»РµРЅРёРµ.}}}%
 \newcommand{\DefinitionCite}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_opr}{+1}\par\textbf{Определение\,\,\definn}\,\,\cite{#2}.}%
-{\par\textbf{Определение}\,\,\cite{#2}.}}%
+{\addtocounter{c_opr}{+1}\par\textbf{РћРїСЂРµРґРµР»РµРЅРёРµ\,\,\definn}\,\,\cite{#2}.}%
+{\par\textbf{РћРїСЂРµРґРµР»РµРЅРёРµ}\,\,\cite{#2}.}}%
 
-\newcommand{\Proof}{\par\textbf{Доказательство.} }
+\newcommand{\Proof}{\par\textbf{Р”РѕРєР°Р·Р°С‚РµР»СЊСЃС‚РІРѕ.} }
 
 \newcommand{\exampn}{\arabic{c_pri}}
 \newcommand{\Example}[1][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_pri}{+1}\par\textbf{Пример\,\,\exampn.}}%
-{\par\textbf{Пример.}}}%
+{\addtocounter{c_pri}{+1}\par\textbf{РџСЂРёРјРµСЂ\,\,\exampn.}}%
+{\par\textbf{РџСЂРёРјРµСЂ.}}}%
 \newcommand{\ExampleCite}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_pri}{+1}\par\textbf{Пример\,\,\exampn}\,\,\cite{#2}.}%
-{\par\textbf{Пример}\,\,\cite{#2}.}}%
+{\addtocounter{c_pri}{+1}\par\textbf{РџСЂРёРјРµСЂ\,\,\exampn}\,\,\cite{#2}.}%
+{\par\textbf{РџСЂРёРјРµСЂ}\,\,\cite{#2}.}}%
 
 \newcommand{\remrkn}{\arabic{c_zam}}
 \newcommand{\Remark}[1][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_zam}{+1}\par\textbf{Замечание\,\,\remrkn.}}%
-{\par\textbf{Замечание.}}}%
+{\addtocounter{c_zam}{+1}\par\textbf{Р—Р°РјРµС‡Р°РЅРёРµ\,\,\remrkn.}}%
+{\par\textbf{Р—Р°РјРµС‡Р°РЅРёРµ.}}}%
 \newcommand{\RemarkCite}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_zam}{+1}\par\textbf{Замечание\,\,\remrkn}\,\,\cite{#2}.}%
-{\par\textbf{Замечание}\,\,\cite{#2}.}}%
+{\addtocounter{c_zam}{+1}\par\textbf{Р—Р°РјРµС‡Р°РЅРёРµ\,\,\remrkn}\,\,\cite{#2}.}%
+{\par\textbf{Р—Р°РјРµС‡Р°РЅРёРµ}\,\,\cite{#2}.}}%
 
 \newcommand{\coroln}{\arabic{c_sle}}
 \newcommand{\Corollary}[2][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_sle}{+1}\par\textbf{Следствие\,\,\coroln.}\textit{ #2}}%
-{\par\textbf{Следствие.}\textit{ #2}}}%
+{\addtocounter{c_sle}{+1}\par\textbf{РЎР»РµРґСЃС‚РІРёРµ\,\,\coroln.}\textit{ #2}}%
+{\par\textbf{РЎР»РµРґСЃС‚РІРёРµ.}\textit{ #2}}}%
 \newcommand{\CorollaryCite}[3][numbered]{\par\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_sle}{+1}\par\textbf{Следствие,\,\coroln}\,\,\cite{#2}.\textit{ #3}}%
-{\par\textbf{Следствие}\,\,\cite{#2}.\textit{ #3}}}%
+{\addtocounter{c_sle}{+1}\par\textbf{РЎР»РµРґСЃС‚РІРёРµ,\,\coroln}\,\,\cite{#2}.\textit{ #3}}%
+{\par\textbf{РЎР»РµРґСЃС‚РІРёРµ}\,\,\cite{#2}.\textit{ #3}}}%
 
-%%% Таблицы %%%
+%%% РўР°Р±Р»РёС†С‹ %%%
 \newcounter{c_tab}
 \setcounter{c_tab}{0}
 \newcommand{\tabn}{\arabic{c_tab}}
 \newcommand{\nextline}{\tabularnewline\hline}
 \newcommand{\Table}[5][numbered]{\par\vspace{-0.3cm}\begin{flushright}\ifthenelse{\equal{#1}{numbered}}%
-{\addtocounter{c_tab}{+1}{\footnotesize\textbf{Таблица\,\,\tabn.} #2}}%
-{{\footnotesize\textbf{Таблица.} #2}}%
+{\addtocounter{c_tab}{+1}{\footnotesize\textbf{РўР°Р±Р»РёС†Р°\,\,\tabn.} #2}}%
+{{\footnotesize\textbf{РўР°Р±Р»РёС†Р°.} #2}}%
 \end{flushright}\vspace{-0.5cm}\par{\footnotesize\begin{center}\begin{tabular}{#3}\hline#4\end{tabular}\end{center}}}%
 
-%%% Рисунки %%%
+%%% Р РёСЃСѓРЅРєРё %%%
 \renewcommand{\@makecaption}[2]{%
 \abovecaptionskip=-5pt
 \belowcaptionskip=-27pt
@@ -157,7 +157,7 @@
 \includegraphics[width=#3]{#4}\caption{#5}
 \end{wrapfigure}\vspace{0.3cm}}
 
-%%% Списки %%%
+%%% РЎРїРёСЃРєРё %%%
 \newcommand{\ITEM}{\vspace{-0.2cm}\item}
 \newcommand{\MList}[1]{\par\begin{itemize}#1\end{itemize}}
 \newcommand{\NList}[1]{\par\begin{enumerate}#1\end{enumerate}}
