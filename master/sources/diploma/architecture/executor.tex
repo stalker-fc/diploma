@@ -1,43 +1,40 @@
-\subsection*{\large{Сервис запуска математических методов}}
+\subsection{\large{Сервис запуска математических методов}}
 \addcontentsline{toc}{subsection}{\large{Сервис запуска математических методов}}
 
-Расчетный сервис представлен тремя компонентами: API, расчётным модулем и математической библиотекой \textbf{nd\_plan}.
-В качестве цели данной работы является проектирование и разработка API и расчетного модуля,
-то поэтому только они и отражены на диаграммах ниже.
+Детальная архитектура сервиса запуска математических методов представлена на диаграмме компонент
+(см. рис\ \ref{pic:architecture__executor-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{architecture/pictures/executor/execution_classes_diagram}
-	\caption{Диаграмма классов расчетного модуля}
-	\label{pic:architecture__execution-classes-diagram}
+	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/executor/component}
+	\caption{Диаграмма компонент сервиса запуска математических методов}
+	\label{pic:architecture__executor-component}
 \end{figure}
 \vskip 5 mm
 
-Архитектура расчетного модуля представлена на диаграмме классов(см. рис\ \ref{pic:architecture__execution-classes-diagram}).
-Основные классы и интерфейсы:
+Сервис представлен следующими компонентами:
 \begin{enumerate}
-	\item \textit{Task} -- расчетная задача.
-	\item \textit{TaskStatus} -- статус выполнения расчетной задачи.
-	\item \textit{ITaskRepository} -- получения данных по расчётной задаче.
-	\item \textit{ITaskHandler} -- запуск расчетных задач в отдельном процессе.
-	\item \textit{ITaskCommandQueue} -- очередь задач.
-	\item \textit{ITaskQueueListener} -- обработчик очереди задач, инициализация процесса расчета задач.
-\end{enumerate}
-
-
-\begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{architecture/pictures/executor/api_classes_diagram}
-	\caption{Диаграмма классов API}
-	\label{pic:architecture__api-classes-diagram}
-\end{figure}
-\vskip 5 mm
-
-Архитектура API представлена на диаграмме классов(см. рис\ \ref{pic:architecture__api-classes-diagram}).
-Основные классы и интерфейсы:
-\begin{enumerate}
-	\item \textit{TaskInfo} -- информация о расчетной задаче.
-	\item \textit{TaskStatus} -- статус выполнения расчетной задачи.
-	\item \textit{TaskInputData} -- входные данные для создания расчетной задачи.
-	\item \textit{TaskOutputData} -- результат расчета.
-	\item \textit{ITaskDataManager} -- преобразование модели данных \textbf{nd\_plan\_model} в модель \textbf{nd\_plan}.
-	\item \textit{IController} -- логика обработки запросов REST API.
+	\item {
+		\textbf{API} -- отвечает за предоставление REST API и отправки задачи в очередь.
+		\begin{itemize}
+			\item \textit{Request Handler}
+			\item \textit{Controller}
+		\end{itemize}
+	}
+	\item {
+		\textbf{Data} -- отвечает за получение и сохранение данных.
+		\begin{itemize}
+			\item \textit{TaskRepository}
+			\item \textit{ModelDataMapper}
+		\end{itemize}
+	}
+	\item {
+		\textbf{Execution} -- отвечает за запуск метода в отдельном процессе.
+		\begin{itemize}
+			\item \textit{Queue}
+			\item \textit{Listener}
+			\item \textit{Storage}
+			\item \textit{Handler}
+			\item \textit{Executor}
+		\end{itemize}
+	}
 \end{enumerate}
