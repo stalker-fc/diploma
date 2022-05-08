@@ -1,0 +1,23 @@
+class Model:
+    glossary: Optional[Glossary] = None
+    affected_areas: Optional[AffectedAreasFeature] = None
+    barriers: Optional[BarriersFeature] = None
+    bounding_polygon: Optional[BoundingPolygonFeature] = None
+    building_connections: Optional[BuildingConnectionsFeature] = None
+    building_offset_rules: Optional[BuildingOffsetRulesFeature] = None
+    buildings: Optional[BuildingsFeature] = None
+    clusters: Optional[ClustersFeature] = None
+    communication_network: Optional[CommunicationNetworkFeature] = None
+    connection_points: Optional[ConnectionPointsFeature] = None
+    external_connections: Optional[ExternalConnectionsFeature] = None
+    external_points: Optional[ExternalPointsFeature] = None
+    global_topology: Optional[GlobalTopologyFeature] = None
+    grid_lines: Optional[GridLinesFeature] = None
+    land_characteristics: Optional[LandCharacteristicsFeature] = None
+    local_topologies: Optional[LocalTopologiesFeature] = None
+    optimization_graph: Optional[OptimizationGraphFeature] = None
+    road: Optional[RoadFeature] = None
+    road_graph: Optional[RoadGraphFeature] = None
+    site_plan_params: Optional[SitePlanParamsFeature] = None
+    site_preparation: Optional[SitePreparationFeature] = None
+    thermal_radiation_areas: Optional[ThermalRadiationAreasFeature] = None
