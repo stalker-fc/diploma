@@ -10,3 +10,36 @@
 	\label{pic:architecture__storage-component}
 \end{figure}
 \vskip 5 mm
+
+
+Сервис представлен следующими компонентами:
+\begin{enumerate}
+	\item {
+		\textbf{API} -- отвечает за предоставление REST API и отправки задачи в очередь.
+		\begin{itemize}
+			\item \textit{Request Handler}
+			\item \textit{Controller}
+		\end{itemize}
+	}
+	\item {
+		\textbf{Repository} -- отвечает за получение и сохранение данных и логику их преобразований.
+		\begin{itemize}
+			\item \textit{ModelRepository}
+			\item \textit{FeatureRepository}
+			\item \textit{GlossaryRepository}
+		\end{itemize}
+	}
+	\item {
+		\textbf{Data} -- преобразование сущностей базы данных в сущности модели данных.
+		\begin{itemize}
+			\item \textit{FeatureMapper}
+			\item \textit{GlossaryMapper}
+		\end{itemize}
+	}
+	\item {
+		\textbf{Database} -- связь с базой данных.
+		\begin{itemize}
+			\item \textit{Database} -- обеспечение CRUD-операций для сущностей базы данных.
+		\end{itemize}
+	}
+\end{enumerate}
