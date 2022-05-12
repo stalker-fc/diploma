@@ -1,9 +1,8 @@
-\subsection*{\large{Разработка математической библиотеки}}
-\addcontentsline{toc}{subsection}{Разработка математической библиотеки}
+\subsection{\large{Разработка математической библиотеки}}
+\addcontentsline{toc}{subsection}
 
 В главе с проектированием системы приведена абстрактная архитектура математической библиотеки
 и описание общих принципов реализации математических методов. Ниже приведем конкретное воплощение этих общих принципов.
-
 
 Математическая библиотека называется \textbf{nd\_plan} и имеет следующую структуру пакетов.
 
@@ -50,11 +49,11 @@
 .2 model.py.
 }
 
-%\lstinputlisting[language=Python]{implementation/listing/math/calculate.py}
+\lstinputlisting[language=Python]{implementation/listings/math/calculate.py}
 
-%\lstinputlisting[language=Python]{implementation/listing/math/model.py}
+\lstinputlisting[language=Python]{implementation/listings/math/model.py}
 
-%\lstinputlisting[language=Python]{implementation/listing/math/configuration.py}
+\lstinputlisting[language=Python]{implementation/listings/math/configuration.py}
 
 Так как мы знаем, что расчет теплового излучения может быть произведен только для факелов, то все сооружения,
 используемые в этом сервисе, мы можем сразу же обозначить, как факелы. Такое название класса сразу позволит
