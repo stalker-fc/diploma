@@ -1,0 +1,16 @@
+FROM plan-design/package:${CI_PIPELINE_ID} as package
+
+# ---------------------------------------------------------------
+# base image for dependencies installation
+FROM python:3.8-slim as base
+
+WORKDIR /app
+
+# installing app dependencies
+COPY --from=builder /wheels /wheels
+COPY --from=package /wheels/package /wheels/package
+
+RUN pip install --user --no-cache /wheels/builder/*
+RUN pip install --user --no-cache /wheels/package/*
+
+RUN pip check
