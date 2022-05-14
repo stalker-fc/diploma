@@ -4,56 +4,30 @@
 В главе с проектированием системы приведена абстрактная архитектура математической библиотеки
 и описание общих принципов реализации математических методов. Ниже приведем конкретное воплощение этих общих принципов.
 
-Математическая библиотека называется \textbf{nd\_plan} и имеет следующую структуру пакетов.
+Математическая библиотека называется \textbf{nd\_plan} и имеет следующую структуру пакетов
+(см. рис.\ref{pic:implementation__math-packages}).
 
-\dirtree{%
-.1 nd\_plan.
-.2 core.
-.2 services.
-.3 aranei.
-.3 barrier.
-.3 blast.
-.3 buddha.
-.3 camino.
-.3 commune.
-.3 derivable.
-.3 distance.
-.3 force.
-.3 grupper.
-.3 gruppo.
-.3 heat.
-.3 metropole.
-.3 netto.
-.3 offsets.
-.3 optimization.
-.3 quadricula.
-.3 roadeo.
-.3 stater.
-.3 strada.
-.3 wall.
-}
+\begin{figure}[H]
+	\hspace*{-2.5 cm}\includegraphics[width=0.7\textwidth]{implementation/pictures/math/packages}
+	\caption{Структура пакетов математической библиотеки \textbf{nd\_plan}}
+	\label{pic:implementation__math-packages}
+\end{figure}
+\vskip 5 mm
 
 Пакет \textit{core} содержит методы и классы, которые могут быть свободно переиспользованы.
 Каждый пакет расположеннный в пакете \textit{services} это реализация отдельной математической методики.
 
-Ниже приведем пример реализации
-методики по расчёту радиусов теплового излучения от факелов. Сервис, в котором реализована эта
+Приведем пример реализации
+методики по расчёту расстояний теплового излучения от факелов. Сервис, в котором реализована эта
 методика имеет название \textit{heat}. Данный сервис имеет простую методику, поэтому для его работы достаточно
 трех обязательных модулей.
 
-\dirtree{%
-.1 heat.
-.2 \_\_init\_\_.py.
-.2 calculate.py.
-.2 configuration.py.
-.2 model.py.
-}
-
-\lstinputlisting[language=Python]{implementation/listings/math/calculate.py}
-
-\lstinputlisting[language=Python]{implementation/listings/math/model.py}
-
-\lstinputlisting[language=Python]{implementation/listings/math/configuration.py}
+\begin{figure}[H]
+	\hspace*{-2.5 cm}\includegraphics[width=0.9\textwidth]{implementation/pictures/math/classes}
+	\caption{Диаграмма классов модели данных сервиса \textbf{heat}}
+	\label{pic:implementation__math-classes}
+\end{figure}
+\vskip 5 mm
 
 Так как мы знаем, что расчет теплового излучения может быть произведен только для факелов, то все сооружения,
 используемые в этом сервисе, мы можем сразу же обозначить, как факелы. Такое название класса сразу позволит
