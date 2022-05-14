@@ -1,0 +1,7 @@
+stages:
+  - stage1
+
+include:
+  - local: stage1/services/service1.yml
+  - local: stage1/services/service2.yml
+  - local: stage1/services/service3.yml

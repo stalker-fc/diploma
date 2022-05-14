@@ -1,0 +1,10 @@
+stages:
+  - stage1
+  - stage2
+  - stage3
+
+include:
+  - local: stage1/main.yml
+  - local: stage2/main.yml
+  - local: stage3/main.yml
+
