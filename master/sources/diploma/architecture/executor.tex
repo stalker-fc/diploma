@@ -29,7 +29,7 @@
 
 Самой технически сложной частью сервиса является компонент, отвечающий за запуск математических методов
 в отдельном процессе. Детальное изображение его компонентов представлено
-на диаграмме ниже (см. рис\ \ref{pic:architecture__executor-component}).
+на диаграмме ниже (см. рис\ \ref{pic:architecture__executor-detailed-component}).
 
 \begin{figure}[H]
 	\hspace*{-2.5 cm}\includegraphics[width=0.8\textwidth]{architecture/pictures/executor/component_detailed}
@@ -37,3 +37,19 @@
 	\label{pic:architecture__executor-detailed-component}
 \end{figure}
 \vskip 5 mm
+
+Компонент запуска математических методов представлен следующими компонентами:
+\begin{enumerate}
+	\item {
+		\textbf{Queue} -- очередь задач на выполнение.
+	}
+	\item {
+		\textbf{Listener} -- обработчик сообщений из очереди.
+	}
+	\item {
+		\textbf{Handler} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
+	}
+	\item {
+		\textbf{MathExecutor} -- отвечает за запуск математических методов в отдельном процессе.
+	}
+\end{enumerate}
