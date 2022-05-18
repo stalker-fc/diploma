@@ -1,0 +1,44 @@
+% Рисунок для титульного слайда.
+\titlegraphic{
+    \includegraphics[scale=.8]{itmo/logo}
+}
+
+% Поля title, author, subject, keywords используются при формировании pdf документа.
+% Поэтому их нужно заполнять, даже если вы формируете титульный слайд руками.
+
+% Формат: \title[Короткое название]{Полное название}
+\title[ВКР]{
+	Проектирование и реализация расчётного модуля для системы автоматического формирования
+	генеральных планов площадных объектов капитального строительства
+}
+
+%\subtitle[short subtitle]{long subtitle}
+
+% В квадратных скобках короткая запись авторов.
+\author[Author]{Степанов Сергей}
+
+%\institute[short institute name]{long institute name}
+
+\where{Санкт-Петербург}
+\date{\today}
+
+% Тематика и ключевые слова.
+\subject{Генеральный план}
+\keywords{Генеральный план площадного объекта}
+
+
+\begin{frame}[plain]
+	\itmopolygons{
+	\vfill
+		\includegraphics[height=0.2\paperheight]{itmo/logo}
+	\vfill
+		{\Large \textbf \inserttitle}
+	\vfill
+		{\textbf \insertauthor}
+	\vfill
+		Научный руководитель: Пантенков С.А. \par
+		Рецензент: Ашихмин И.А.
+	\vfill
+		{\small \insertplace, \insertdate}
+}
+\end{frame}
