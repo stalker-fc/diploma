@@ -5,7 +5,7 @@
 (см. рис\ \ref{pic:architecture__orchestrator-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component}
+	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_common}
 	\caption{Диаграмма компонент сервиса запуска расчётных задач}
 	\label{pic:architecture__orchestrator-component}
 \end{figure}
@@ -14,31 +14,63 @@
 Сервис представлен следующими компонентами:
 \begin{enumerate}
 	\item {
-		\textbf{API} -- отвечает за предоставление REST API и отправки задачи в очередь.
-		\begin{itemize}
-			\item \textit{Request Handler}
-			\item \textit{Controller}
-		\end{itemize}
+		\textit{API} -- отвечает за предоставление REST API и отправки задачи в очередь.
 	}
 	\item {
-		\textbf{Repository} -- отвечает за получение и сохранение данных и логику их преобразований.
-		\begin{itemize}
-			\item \textit{ModelRepository}
-			\item \textit{FeatureRepository}
-			\item \textit{GlossaryRepository}
-		\end{itemize}
+		\textit{Repository} -- отвечает за получение и сохранение данных и логику их преобразований.
 	}
 	\item {
-		\textbf{Data} -- преобразование сущностей базы данных в сущности модели данных.
-		\begin{itemize}
-			\item \textit{FeatureMapper}
-			\item \textit{GlossaryMapper}
-		\end{itemize}
+		\textit{Execution} -- компонент, отвечающий за выполнение расчётных задач.
 	}
 	\item {
-		\textbf{Database} -- связь с базой данных.
-		\begin{itemize}
-			\item \textit{Database} -- обеспечение CRUD-операций для сущностей базы данных.
-		\end{itemize}
+		\textit{Clients} -- клиенты для взаимодействия с хранилищем расчётных данных
+		и сервисом запуска математических методов.
+	}
+	\item {
+		\textit{Database} -- чтение/сохранение сущностей базы данных.
+	}
+\end{enumerate}
+
+Для расчёта генерального плана площадного объекта в автоматическом режиме используются четыре типа сущностей.
+\begin{itemize}
+	\item {
+		\textit{Task} -- расчётная задача.
+	}
+	\item {
+		\textit{Stage} -- этап расчётной задачи.
+	}
+	\item {
+		\textit{Calculation} -- последовательный расчёт одной или нескольких математических методик.
+	}
+	\item {
+		\textit{Method} -- запуск математической методики, представленный в математической библиотеке.
+	}
+\end{itemize}
+
+Самой технически сложной частью сервиса является компонент, отвечающий за запуск расчётных задач.
+Детальное изображение его компонентов представлено
+на диаграмме ниже (см. рис\ \ref{pic:architecture__orchestrator-detailed-component}).
+
+\begin{figure}[H]
+	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_detailed}
+	\caption{Диаграмма компонент сервиса запуска расчётных задач}
+	\label{pic:architecture__orchestrator-detailed-component}
+\end{figure}
+\vskip 5 mm
+
+
+Сервис представлен следующими компонентами:
+\begin{enumerate}
+	\item {
+		\textit{Task Execution}
+	}
+	\item {
+		\textit{Stage Execution}
+	}
+	\item {
+		\textit{Calculation Execution}
+	}
+	\item {
+		\textit{Method Execution}
 	}
 \end{enumerate}
