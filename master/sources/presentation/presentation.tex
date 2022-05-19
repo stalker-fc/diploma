@@ -45,7 +45,6 @@
 % Этот текст можно заменить на другой, например:
 \setfootlinetext{\insertsection}
 
-
 \begin{document}
 
 \input{title.tex}
@@ -60,99 +59,8 @@
 
 \input{results.tex}
 
-\section{Second Section}
-
-\begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Regular Block}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
-
-\begin{exampleblock}{Example Block}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{exampleblock}
-
-\begin{alertblock}{Alert Block}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
-\end{alertblock}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Colors}
-
-You can use main official predefined colors
-\textcolor{ITMOblue}{ITMOblue} and \textcolor{ITMOred}{ITMOred}, and also
- \textcolor{ITMOorange}{ITMOorange}, \textcolor{ITMOsky}{ITMOsky}, \textcolor{ITMOpistachio}{ITMOpistachio}, \textcolor{ITMOaqua}{ITMOaqua}, \textcolor{ITMOice}{ITMOice}, \textcolor{ITMOgold}{ITMOgold}, \textcolor{ITMOyellow}{ITMOyellow}, \textcolor{ITMOtomato}{ITMOtomato}, \textcolor{ITMOgreen}{ITMOgreen}.
-
-\end{frame}
-
-
-
-\subsection{Using columns}
-
-
-\begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c]
-
-\column{.45\textwidth}{
-    \begin{enumerate}
-        \item First item
-        \item Second item
-        \item Third item
-    \end{enumerate}
-}
-
-\column{.45\textwidth}{
-    \begin{itemize}
-        \item Some item
-        \item Another item
-        \item Also item
-    \end{itemize}
-}
-
-\end{columns}
-\end{frame}
-
-
-
-\section{Other LaTex stuff}
-
-\subsection{Tables}
-
-
-\begin{frame}
-\frametitle{Table}
-
-% Лучше не использовать table в презентациях, только tabular. А описание таблиц делать руками.
-
-\begin{table}
-\caption{Multiplication table of complex numbers}
-\begin{tabular}{r | r r r r r}
-$a \times b$ & $0$ &  $1$ &  $i$ & $-1$ & $-i$ \\ \hline
-         $0$ & $0$ &  $0$ &  $0$ &  $0$ &  $0$ \\
-         $1$ & $0$ &  $1$ &  $i$ & $-1$ & $-i$ \\
-         $i$ & $0$ &  $i$ & $-1$ & $-i$ &  $1$ \\
-        $-1$ & $0$ & $-1$ & $-i$ &  $1$ &  $i$ \\
-        $-i$ & $0$ & $-i$ &  $1$ &  $i$ & $-1$ \\
-\end{tabular}
-\end{table}
-\end{frame}
-
-
-\subsection{Theorems and Equations}
-
-
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Fermat's Last Theorem]
-\begin{equation}
-    \forall n, x, y, z \in \mathbb{N}: \mathbf{n > 2} \Rightarrow x^n + y^n \neq z^n
-\end{equation}
-\end{theorem}
-I have discovered a truly remarkable proof of this theorem which this frame is too small to contain.
-\end{frame}
-
 \input{end.tex}
+
+%\input{samples.tex}
+
 \end{document}
