@@ -5,7 +5,7 @@
 (см. рис\ \ref{pic:architecture__executor-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/executor/component_common}
+	\includegraphics[width=\textwidth]{architecture/pictures/executor/component_common}
 	\caption{Верхнеуровневая диаграмма компонент сервиса запуска математических методов}
 	\label{pic:architecture__executor-component}
 \end{figure}
@@ -23,7 +23,7 @@
 		\textit{MathDataMapper} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
 	}
 	\item {
-		\textit{Execution} -- отвечает за запуск математических методов в отдельном процессе.
+		\textit{MathExecution} -- отвечает за запуск математических методов в отдельном процессе.
 	}
 \end{enumerate}
 
@@ -32,7 +32,7 @@
 на диаграмме ниже (см. рис\ \ref{pic:architecture__executor-detailed-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=0.8\textwidth]{architecture/pictures/executor/component_detailed}
+	\includegraphics[width=0.6\textwidth]{architecture/pictures/executor/component_detailed}
 	\caption{Диаграмма компонента запуска математических методов}
 	\label{pic:architecture__executor-detailed-component}
 \end{figure}
@@ -41,13 +41,13 @@
 Компонент запуска математических методов представлен следующими компонентами:
 \begin{enumerate}
 	\item {
-		\textit{Queue} -- очередь задач на выполнение.
+		\textit{MathQueue} -- очередь задач на выполнение.
 	}
 	\item {
-		\textit{Listener} -- обработчик сообщений из очереди.
+		\textit{MathListener} -- обработчик сообщений из очереди.
 	}
 	\item {
-		\textit{Handler} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
+		\textit{MathHandler} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
 	}
 	\item {
 		\textit{MathExecutor} -- отвечает за запуск математических методов в отдельном процессе.
