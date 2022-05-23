@@ -35,7 +35,10 @@ async def handle_long_cpu_bound_task(
         execution_config,
         task_id,
     )
-    process = Process(target=execute_long_task, args=args)
+    process = Process(
+                   target=execute_long_task,
+                   args=args
+               )
 
     task_execution_process = TaskExecutionProcess(
         task_id,
