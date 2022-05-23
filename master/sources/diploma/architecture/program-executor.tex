@@ -1,12 +1,8 @@
 \subsubsection{\large{Сервис запуска математических методов}}
 \addcontentsline{toc}{subsubsection}
 
-Расчетный сервис представлен тремя компонентами: API, расчётным модулем и математической библиотекой \textbf{nd\_plan}.
-В качестве цели данной работы является проектирование и разработка API и расчетного модуля,
-то поэтому только они и отражены на диаграммах ниже.
-
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{architecture/pictures/executor/execution_classes_diagram}
+	\includegraphics[width=\textwidth]{architecture/pictures/executor/execution_classes_diagram}
 	\caption{Диаграмма классов расчетного модуля}
 	\label{pic:architecture__execution-classes-diagram}
 \end{figure}
@@ -25,7 +21,7 @@
 
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=1.2\textwidth]{architecture/pictures/executor/api_classes_diagram}
+	\includegraphics[width=\textwidth]{architecture/pictures/executor/api_classes_diagram}
 	\caption{Диаграмма классов API}
 	\label{pic:architecture__api-classes-diagram}
 \end{figure}
@@ -38,6 +34,6 @@
 	\item \textit{TaskStatus} -- статус выполнения расчетной задачи.
 	\item \textit{TaskInputData} -- входные данные для создания расчетной задачи.
 	\item \textit{TaskOutputData} -- результат расчета.
-	\item \textit{ITaskDataManager} -- преобразование модели данных \textbf{nd\_plan\_model} в модель \textbf{nd\_plan}.
+	\item \textit{ITaskDataManager} -- преобразование расчётной модели данных в модель данных математической библиотеки.
 	\item \textit{IController} -- логика обработки запросов REST API.
 \end{enumerate}
