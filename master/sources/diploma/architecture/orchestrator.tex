@@ -106,7 +106,6 @@
 	}
 \end{enumerate}
 
-
 \begin{figure}[H]
 	\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/sequence}
 	\caption{Диаграмма последовательности выполнения расчётной задачи}
@@ -114,29 +113,10 @@
 \end{figure}
 \vskip 5 mm
 
-Все эти компоненты имеют похожую внутреннюю структуру. В качестве примера рассмотрим компонент
-\textit{Calculation Execution}, остальные компоненты устроены похожим образом
-(см. рис\ \ref{pic:architecture__orchestrator-detailed-component}).
-
-\begin{figure}[H]
-	\includegraphics[width=0.7\textwidth]{architecture/pictures/orchestrator/calculation_component}
-	\caption{Диаграмма компонентов сервиса запуска расчётных задач}
-	\label{pic:architecture__orchestrator-task-execution-component}
-\end{figure}
-\vskip 5 mm
-
-Компонент запуска математических методов представлен следующими компонентами:
-\begin{enumerate}
-	\item {
-		\textit{Queue} -- очередь задач на выполнение.
-	}
-	\item {
-		\textit{Listener} -- обработчик сообщений из очереди.
-	}
-	\item {
-		\textit{Handler} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
-	}
-	\item {
-		\textit{MathExecutor} -- отвечает за запуск математических методов в отдельном процессе.
-	}
-\end{enumerate}
+Выше представлена диаграмма последовательности выполнения расчётной
+задачи(см. рис\ \ref{pic:architecture__orchestrator-sequence}).
+Для её выполнения происходит вызов компонента \textit{TaskExecution}. Пока присутствуют
+нерасчитанные этапы, происходит последовательный вызов компонента \textit{StageExecution}.
+В рамках выполнения этапа расчётной задачи вызывается компонент, отвечающий за выполнение расчётов
+\textit{CalculationExecution}.
+Для выполнения одного расчёта последовательно вызывается компонент \textit{MethodExecution}.
