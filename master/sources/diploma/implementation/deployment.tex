@@ -17,7 +17,7 @@ Stage выполняются строго последовательно, но �
 
 Пример зависимостей в Pipeline можно увидеть на рисунке ниже(см. рис\ref{pic:implementation__deployment-dependencies}).
 \begin{figure}[H]
-	\includegraphics[width=\textwidth]{implementation/pictures/deployment/environment}
+	\includegraphics[width=\textwidth]{implementation/pictures/deployment/dependencies}
 	\caption{Зависимости в Pipeline в Gitlab CI/CD}
 	\label{pic:implementation__deployment-dependencies}
 \end{figure}
@@ -69,8 +69,8 @@ Gitlab CI/CD имеет возможность создания, как стат
 .3 main.yml.
 .1 main.yml.
 }
-
 \vskip 5mm
+
 Данная структура является иерархической.
 Корневая директория называется \textit{gitlab-ci}. В корневой директории находится файл
 \textit{gitlab-ci/main.yml}
