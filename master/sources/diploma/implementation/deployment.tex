@@ -15,7 +15,7 @@ Pipeline -- это верхнеуровневый элемент набора о
 Правила развертывания в Gitlab CI/CD представляют собой Directed Acyclic Graph(DAG).
 Stage выполняются строго последовательно, но между Job-ами можно устанавливать зависимости.
 
-Пример зависимостей в Pipeline можно увидеть на рисунке ниже(см. рис\ref{pic:implementation__deployment-dependencies}).
+Пример зависимостей в Pipeline можно увидеть на рисунке ниже(см. рисунок \ref{pic:implementation__deployment-dependencies}).
 \begin{figure}[H]
 	\includegraphics[width=\textwidth]{implementation/pictures/deployment/dependencies}
 	\caption{Зависимости в Pipeline в Gitlab CI/CD}
@@ -31,7 +31,7 @@ Gitlab CI/CD имеет возможность создания, как стат
 То динамические окружения -- это отличное решение для изолированного тестирования нового функционала
 отдельно от окружений, с которыми взаимодействуют пользователи. Именно они позволяют развернуть
 изолированный прототип системы путем нажатия одной кнопки в интерфейсе.
-Пример окружений можно увидеть на рисунке ниже(см. рис\ref{pic:implementation__deployment-environment}).
+Пример окружений можно увидеть на рисунке ниже(см. рисунок \ref{pic:implementation__deployment-environment}).
 \begin{figure}[H]
 	\includegraphics[width=\textwidth]{implementation/pictures/deployment/environment}
 	\caption{Пример динамических окружений}
