@@ -1,12 +1,12 @@
 \subsubsection{\large{Cервис запуска расчётных задач}}
 \addcontentsline{toc}{subsubsection}
 
-Детальная архитектура сервиса запуска расчётных задач представлена на диаграмме компонент
-(см. рис\ \ref{pic:architecture__orchestrator-component}).
+Архитектура сервиса запуска расчётных задач представлена на диаграмме
+компонентов(см. рис\ \ref{pic:architecture__orchestrator-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_common}
-	\caption{Диаграмма компонент сервиса запуска расчётных задач}
+	\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_common}
+	\caption{Диаграмма компонентов сервиса запуска расчётных задач}
 	\label{pic:architecture__orchestrator-component}
 \end{figure}
 \vskip 5 mm
@@ -33,71 +33,94 @@
 
 Для расчёта генерального плана площадного объекта в автоматическом режиме используются четыре типа сущностей,
 представленные на диаграмме ниже(см. рис.\ref{pic:architecture__orchestrator-classes})
+
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/classes}
-	\caption{Диаграмма классов}
+	\includegraphics[width=0.8\textwidth]{architecture/pictures/orchestrator/classes}
+	\caption{Диаграмма классов основных сущностей сервиса запуска расчётных задач}
 	\label{pic:architecture__orchestrator-classes}
 \end{figure}
 \vskip 5 mm
 
 \begin{itemize}
 	\item {
-		\textit{Task} -- расчётная задача. Задача состоит из набора этапов, которые выполняются последовательно.
+		\textit{Task} -- расчётная задача.
+		Результатом выполнения задачи является генеральный план площадного объекта.
+		Задача состоит из набора этапов, выполняющихся строго последовательно.
+		Результат выполнения следующего этапа зависит от результатов предыдущего.
 	}
 	\item {
-		\textit{Stage} -- этап расчётной задачи. Для каждого этапа определена хотя бы одна последовательность
-		математических методик.
+		\textit{Stage} -- этап расчётной задачи.
+		Для каждого этапа определен хотя бы один расчёт.
+		Расчёты могут выполняться параллельно.
+		Результатом этапа может быть только один расчёт.
 	}
 	\item {
-		\textit{Calculation} -- последовательность математических методик.
+		\textit{Calculation} -- расчёт. Состоит из последовательности методов.
 	}
 	\item {
-		\textit{Method} -- запуск математической методики, представленной в математической библиотеке.
+		\textit{Method} -- метод. Способ применения математической методики.
 	}
 \end{itemize}
 
 Такое разбиение на классы обусловлены высокой сложностью и вариативностью расчёта генплана.
-Расчётная задача \textit{Task} в качестве своего результата всегда даёт генплан.
-Так как расчётная задача очень сложная и состоит из большого количества частей,
-каждая из которых может быть рассчитана разными математическими методиками.
-Бывают случаи, когда для достижения качественного результата применение одной математической методики
-явно недостаточно. Поэтому имеет смысл вызывать последовательно именно набор математических методов.
 
-Самой технически сложной частью сервиса является компонент, отвечающий за запуск расчётных задач.
-Детальное изображение его компонентов представлено
-на диаграмме ниже (см. рис\ \ref{pic:architecture__orchestrator-detailed-component}).
+Наименьшим блоком в расчёте генерального плана является метод. Метод является одним из способов применения
+определенной математической методики, которая представлена в математической библиотеке.
+
+Блок, который отвечает за последовательность вызова математических методик называется расчёт.
+Для получения результата более высокого качества требуется иметь возможность последовательно выполнять несколько
+математических методик.
+Например, для того чтобы рассчитать правила минимальных допустимых расстояний с учётом зон теплового излучения
+требуется вычислить параметры этих зон, а затем на основе полученных параметров произвести расчёт минимальных
+допустимых расстояний. Таким образом последовательно вызываются две методики для получения одного расчётного элемента.
+
+Объектом, который объединяет расчёты является этап. Этап состоит хотя бы из одного расчёта. В рамках этапа
+расчёты могут выполняться параллельно. Входные данные расчёта зависят только от результата выполнения предыдущих этапов
+задачи. Результатом этапа может быть только один результат расчёта.
+
+Задача представлена набором этапов. Все этапы выполняются строго последовательно, результат последующего этапа
+зависит от результата выполнения предыдущих.
+
+Для оперирования с указанными сущностями предлагается следующая архитектура
+компонентов(см. рис\ \ref{pic:architecture__orchestrator-detailed-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_detailed}
-	\caption{Диаграмма компонент сервиса запуска расчётных задач}
+	\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/component_detailed}
+	\caption{Диаграмма компонентов запуска расчётных задач}
 	\label{pic:architecture__orchestrator-detailed-component}
 \end{figure}
 \vskip 5 mm
 
-
-Сервис представлен следующими компонентами:
 \begin{enumerate}
 	\item {
-		\textit{Task Execution}
+		\textit{Task Execution} -- выполнение расчётной задачи.
 	}
 	\item {
-		\textit{Stage Execution}
+		\textit{Stage Execution} -- выполнение этапа задачи.
 	}
 	\item {
-		\textit{Calculation Execution}
+		\textit{Calculation Execution} -- выполнение расчёта.
 	}
 	\item {
-		\textit{Method Execution}
+		\textit{Method Execution} -- выполнение математической методики.
 	}
 \end{enumerate}
+
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{architecture/pictures/orchestrator/sequence}
+	\caption{Диаграмма последовательности выполнения расчётной задачи}
+	\label{pic:architecture__orchestrator-sequence}
+\end{figure}
+\vskip 5 mm
 
 Все эти компоненты имеют похожую внутреннюю структуру. В качестве примера рассмотрим компонент
 \textit{Calculation Execution}, остальные компоненты устроены похожим образом
 (см. рис\ \ref{pic:architecture__orchestrator-detailed-component}).
 
 \begin{figure}[H]
-	\hspace*{-2.5 cm}\includegraphics[width=0.7\textwidth]{architecture/pictures/orchestrator/calculation_component}
-	\caption{Диаграмма компонент сервиса запуска расчётных задач}
+	\includegraphics[width=0.7\textwidth]{architecture/pictures/orchestrator/calculation_component}
+	\caption{Диаграмма компонентов сервиса запуска расчётных задач}
 	\label{pic:architecture__orchestrator-task-execution-component}
 \end{figure}
 \vskip 5 mm
