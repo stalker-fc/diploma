@@ -5,7 +5,7 @@
 проекта(см. рисунок \ref{pic:implementation__packages}).
 
 \begin{figure}[H]
-	\includegraphics[width=\textwidth]{pictures/packages}
+	\includegraphics[width=0.6\textwidth]{pictures/packages}
 	\caption{Диаграмма пакетов сервиса запуска расчётных задач}
 	\label{pic:implementation__packages}
 \end{figure}
@@ -102,5 +102,5 @@ class Task:
     name: str = ""
     task_type_id: UUID = UUID(int=0)
     status: Status = Status.CREATED
-
+\end{lstlisting}
 \vskip 10 mm

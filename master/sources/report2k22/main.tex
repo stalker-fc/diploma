@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{article}[12pt]
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english, russian]{babel}
@@ -24,11 +24,13 @@
 \parindent=1.25cm
 \linespread{1.3}
 
+\lstset{basicstyle=\ttfamily}
+
 \begin{document}
 \input{title.tex}
 \input{review.tex}
 \newpage
-\large{\tableofcontents}
+\tableofcontents
 \newpage
 \input{definitions.tex}
 \newpage
