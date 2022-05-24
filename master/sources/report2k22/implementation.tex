@@ -1,69 +1,31 @@
-\section*{\Large{Реализация}}
-\addcontentsline{toc}{section}{Реализация}
+\section*{\Large{РЕАЛИЗАЦИЯ}}
+\addcontentsline{toc}{section}{РЕАЛИЗАЦИЯ}
 
-При реализации описанной архитектуры была получена следующая структура проекта.
-\dirtree{%
-.1 /.
-.2 app.
-.3 api.
-.4 \_\_init\_\_.py.
-.4 controller.py.
-.4 exception\_handlers.py.
-.4 middlewares.py.
-.4 model.py.
-.4 responses.py.
-.4 serialization.py.
-.4 views.py.
-.3 data.
-.4 mappers.
-.5 services.
-.6 services mappings implementations.
-.5 \_\_init\_\_.py.
-.5 registry.py.
-.5 utils.py.
-.4 \_\_init\_\_.py.
-.4 data\_manager.py.
-.4 features\_registry.py.
-.4 repository.py.
-.4 storage.py.
-.3 domain.
-.4 \_\_init\_\_.py.
-.4 listener.py.
-.4 model.py.
-.4 queue.py.
-.4 repository.py.
-.3 execution.
-.4 \_\_init\_\_.py.
-.4 executor.py.
-.4 handler.py.
-.4 listener.py.
-.4 queue.py.
-.4 storage.py.
-.3 \_\_init\_\_.py.
-.3 app.py.
-.3 exceptions.py.
-.3 logger.py.
-.2 Dockerfile.
-.2 README.md.
-.2 main.py.
-.2 requirements.txt.
-}
+При реализации описанной архитектуры была получена следующая структура
+проекта(см. рисунок \ref{pic:implementation__packages}).
 
-Само приложение находится в директории \textbf{app}.
-Всего получилось 4 python-пакета, в которых и скрыта основная логика работы.
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{pictures/packages}
+	\caption{Диаграмма пакетов сервиса запуска расчётных задач}
+	\label{pic:implementation__packages}
+\end{figure}
+\vskip 5 mm
+
+Всего получилось 6 python-пакетов, в которых и скрыта основная логика работы.
 \begin{enumerate}
-    \item \textbf{api} -- реализует API сервисы через HTTP. То есть endpoint-ы,
+    \item \textit{api} -- реализует API сервисы через HTTP. То есть endpoint-ы,
     модели запросов/ответов к серверу, а также взаимодействие с \textit{ITaskRepository} и \textit{ITaskDataManager}
-    \item \textbf{data} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
-    \item \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
-    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__execution-classes-diagram}). Непосредственная
-    реализация обозначенных интерфейсов находится в других пакетах.
-    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за запуск математических методов
-    в отдельном процессе.
+    \item \textit{database} -- обеспечивает взаимодействие с базой данных.
+    \item \textit{clients} -- пакеты, в котором находятся клиенты для взаимодействия с сервисами хранилища и сервиса 
+    запуска математических методов.
+    \item \textit{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
+    Непосредственная реализация обозначенных интерфейсов находится в других пакетах.
+    \item \textit{execution} -- пакет, в котором находится код, отвечающий за запуск расчётных задач.
+    \item \textit{repositories} -- пакет, который обеспечивает логику сохранения/получения сущностей проекта из БД.
 \end{enumerate}
 
-\section*{\Large{Примеры кода}}
-\addcontentsline{toc}{section}{Примеры кода}
+\subsection*{\Large{Примеры кода}}
+\addcontentsline{toc}{subsection}{Примеры кода}
 
 \begin{lstlisting}[language=Python, caption=main.py, captionpos=b]
 from app import startup_app
@@ -98,17 +60,7 @@ ENTRYPOINT /bin/bash -c "gunicorn run_app:app --workers=${N_WORKERS} --bind 0.0.
 
 \vskip 10 mm
 \begin{lstlisting}[language=Python, caption=domain/model.py, captionpos=b]
-from dataclasses import dataclass
-from enum import Enum
-from typing import Optional
-from uuid import UUID
-
-from dataclasses_json import dataclass_json
-
-from nd_plan.interfaces import MethodName
-
-
-class TaskStatus(Enum):
+class Status(Enum):
     CREATED = "CREATED"
     QUEUED = "QUEUED"
     RUNNING = "RUNNING"
@@ -117,15 +69,38 @@ class TaskStatus(Enum):
     FAILURE = "FAILURE"
 
 
-@dataclass_json
+@dataclass
+class Feature:
+    id: UUID = UUID(int=0)
+    feature_type_id: UUID = UUID(int=0)
+
+
+@dataclass
+class Method:
+    id: UUID = UUID(int=0)
+    method_type_id: UUID = UUID(int=0)
+    status: Status = Status.CREATED
+
+
+@dataclass
+class Calculation:
+    id: UUID = UUID(int=0)
+    calculation_type_id: UUID = UUID(int=0)
+    status: Status = Status.CREATED
+
+
+@dataclass
+class Stage:
+    id: UUID = UUID(int=0)
+    stage_type_id: UUID = UUID(int=0)
+    status: Status = Status.CREATED
+
+
 @dataclass
 class Task:
-    task_id: UUID
-    status: TaskStatus
-    method_name: nd_plan.MethodName
-    input_data: nd_plan.InputDataType
-    configuration: Optional[nd_plan.ConfigurationType] = None
-    output_data: Optional[nd_plan.SolutionType] = None
-\end{lstlisting}
+    id: UUID = UUID(int=0)
+    name: str = ""
+    task_type_id: UUID = UUID(int=0)
+    status: Status = Status.CREATED
 
 \vskip 10 mm
