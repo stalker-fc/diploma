@@ -2,6 +2,46 @@
 \section{Приложения}
 
 \begin{frame}
+\frametitle{Варианты использования}
+\begin{figure}
+    \includegraphics[scale=.48]{pictures/analysis/usecase}
+    \caption{Диаграмма вариантов использования}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Предметная область задачи}
+\begin{columns}[c]
+
+\column{.45\textwidth}{
+    Входные данные
+    \begin{itemize}
+        \item допустимая для строительства область на карте;
+        \item стоимостная модель расчета стоимости инженерной подготовки;
+        \item перечень сооружений;
+        \item параметры коммуникаций между сооружениями проектируемого объекта;
+        \item параметры цифровой модели рельефа;
+    \end{itemize}
+}
+
+\column{.45\textwidth}{
+    Выходные данные
+    \begin{itemize}
+        \item фигура площадного объекта;
+        \item местоположения сооружений;
+        \item схема технологических эстакад минимальной длины;
+        \item схема внутриплощадочных проездов;
+        \item стоимость инженерной подготовки;
+        \item зоны распространения теплового потока;
+        \item зоны распространения взрывной волны;
+    \end{itemize}
+}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
 \frametitle{Технологический стек}
 \begin{itemize}
     \item Операционная система \textit{Ubuntu 20.04 LTS}
@@ -42,5 +82,13 @@
 \frametitle{Хранилище расчётных данных}
 \begin{figure}
     \includegraphics[scale=.55]{pictures/architecture/storage_component_common}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Компонент запуска расчётных задач}
+\begin{figure}
+    \includegraphics[scale=.5]{pictures/architecture/orchestrator_component_detailed}
 \end{figure}
 \end{frame}
