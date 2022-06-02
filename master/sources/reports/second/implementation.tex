@@ -1,0 +1,231 @@
+\section*{\Large{Реализация}}
+\addcontentsline{toc}{section}{Реализация}
+
+При реализации описанной архитектуры была получена следующая структура проекта.
+\dirtree{%
+.1 /.
+.2 app.
+.3 api.
+.4 \_\_init\_\_.py.
+.4 contexts.py.
+.4 controller.py.
+.4 model.py.
+.4 responses.py.
+.4 views.py.
+.3 domain.
+.4 \_\_init\_\_.py.
+.4 cache\_storage.py.
+.4 data\_provider.py.
+.4 model.py.
+.4 renderer.py.
+.4 repository.py.
+.3 execution.
+.4 \_\_init\_\_.py.
+.4 executor.py.
+.4 handler.py.
+.4 listener.py.
+.4 queue.py.
+.4 result.py.
+.4 storage.py.
+.3 repository.
+.4 \_\_init\_\_.py.
+.4 cache\_storage.py.
+.4 data\_provider.py.
+.4 renderer.py.
+.4 repository.py.
+.3 \_\_init\_\_.py.
+.3 app.py.
+.3 exceptions.py.
+.3 logger.py.
+.2 Dockerfile.
+.2 README.md.
+.2 main.py.
+.2 requirements.txt.
+}
+
+Само приложение находится в директории \textbf{app}.
+Всего получилось 4 python-пакета, в которых и скрыта основная логика работы.
+\begin{enumerate}
+    \item \textbf{api} -- реализует API тайлового сервера через HTTP. То есть endpoint-ы,
+    модели запросов/ответов к серверу, а также взаимодействие с \textit{ITilesRepository}
+    \item \textbf{domain} -- пакет, в котором определены только интерфейсы взаимодействия между модулями программы.
+    Именно здесь и реализована диаграмма классов (см. рис\ \ref{pic:architecture__classes-diagram}). Непосредственная
+    реализация обозначенных интерфейсов находится в других пакетах.
+    \item \textbf{execution} -- пакет, в котором вызывается код, отвечающий за рендеринг в отдельном процессе.
+    Рендеринг является CPU-bound задачей, поэтому правильнее
+    запускать его через отдельный процесс, чтобы он не воздействовал на главный процесс приложения.
+    \item \textbf{repository} -- в этом пакете находится реализация интерфейсов из \textbf{domain}.
+\end{enumerate}
+
+\section*{\Large{Примеры кода}}
+\addcontentsline{toc}{section}{Примеры кода}
+
+\begin{lstlisting}[language=Python, caption=main.py, captionpos=b]
+from app import startup_app
+
+if __name__ == '__main__':
+    from aiohttp import web
+
+    web.run_app(startup_app(), host="0.0.0.0", port=8080)
+\end{lstlisting}
+\vskip 10 mm
+\begin{lstlisting}[caption=Dockerfile, captionpos=b]]
+FROM python:3.8@sha256:4c4e6735f46e7727965d1523015874ab08f71377b3536b8789ee5742fc737059
+
+WORKDIR /app
+
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV N_WORKERS 8
+
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+RUN pip3 check
+
+COPY main.py .
+
+COPY /app ./app
+
+ENTRYPOINT /bin/bash -c "gunicorn run_app:app --workers=${N_WORKERS} --bind 0.0.0.0:8080 --worker-class aiohttp.GunicornWebWorker --timeout 0"
+\end{lstlisting}
+\vskip 10 mm
+\begin{lstlisting}[language=Python, caption=domain/model.py, captionpos=b]
+from enum import Enum
+from typing import Dict
+from typing import List
+from typing import Type
+from typing import Union
+from uuid import UUID
+
+from dataclasses import dataclass
+from shapely.geometry.base import BaseGeometry
+
+
+@dataclass
+class TileInfo:
+    site_plan_id: UUID
+    x: int
+    y: int
+    z: int
+
+class GeometryType(Enum):
+    POINT = "point"
+    LINESTRING = "line"
+    POLYGON = "polygon"
+
+@dataclass
+class Feature:
+    geometry: Type[BaseGeometry]
+    properties: Dict[str, Union[int, float, str, bool]]
+
+@dataclass
+class Layer:
+    name: str
+    geometry_type: GeometryType
+    features: List[Feature]
+
+@dataclass
+class TileData:
+    layers: List[Layer]
+
+
+@dataclass
+class LayerConfiguration:
+    layer_name: str
+    geometry_type: GeometryType
+    sql_query: str
+
+@dataclass
+class TileConfiguration:
+    layers_configurations: List[LayerConfiguration]
+\end{lstlisting}
+
+\vskip 10 mm
+
+\begin{lstlisting}[language=Python, caption=domain/model.py, captionpos=b]
+import traceback
+from pathlib import Path
+from uuid import UUID
+
+from aiohttp import web
+
+from app.exceptions import TileDoesNotExistException
+from app.domain.model import TileInfo
+from app.repository import create_tiles_repository
+
+
+async def index(request):
+    static_dir = request.config_dict['static_dir']
+    return web.FileResponse(static_dir / Path('index.html'))
+
+
+async def vector_tiles(request):
+    tile = TileInfo(
+        site_plan_id=UUID(request.rel_url.query['task_id']),
+        x=int(request.rel_url.query['x']),
+        y=int(request.rel_url.query['y']),
+        z=int(request.rel_url.query['z'])
+    )
+
+    vector_data_service = request.config_dict['vector_data_service']
+    try:
+        tile_data: bytes = tiles_repository.get_tile(tile)
+        return web.Response(
+            body=tile_data,
+            status=200,
+            content_type="application/x-protobuf",
+            headers={
+                'Access-Control-Allow-Origin': '*',
+            }
+        )
+    except TileDoesNotExistException as e:
+        return web.Response(
+            status=404,
+            text=str(e),
+            headers={
+                'Access-Control-Allow-Origin': '*'
+            }
+        )
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(tb)
+        return web.Response(
+            status=500,
+            text=tb,
+            headers={
+                'Access-Control-Allow-Origin': '*'
+            }
+        )
+
+
+async def clean_cache_for_task(request):
+    task_id = UUID(request.rel_url.query['task_id'])
+
+    tiles_repository = request.config_dict['tiles_repository']
+    tiles_repository.clean(task_id)
+    return web.Response(
+        status=200,
+        headers={
+            'Access-Control-Allow-Origin': '*',
+        }
+    )
+
+
+def startup_app():
+    app = web.Application()
+
+    tiles_repository = create_tiles_repository()
+    static_dir = Path(__file__).parent / Path('static')
+
+    app['tiles_repository'] = tiles_repository
+    app['static_dir'] = static_dir
+
+    app.add_routes([
+        web.get("/", index),
+        web.get("/index", index),
+        web.get("/vector", vector_tiles),
+        web.get("/clean", clean_cache_for_task),
+    ])
+    return app
+\end{lstlisting}

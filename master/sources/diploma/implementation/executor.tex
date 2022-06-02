@@ -1,0 +1,51 @@
+\subsection{\large{Разработка сервиса по запуску математических методов}}
+\addcontentsline{toc}{subsection}
+
+Одним из современных стандартов разработки веб-приложений на языке Python является использование
+библиотеки \textit{asyncio}. Обычно при использовании данной библиотеки для запуска задач в отдельном процессе
+используется экземпляр класса \textit{concurrent.futures.ProcessPoolExecutor}.
+
+\begin{lstlisting}[caption={Пример запуска с использованием \textit{ProcessPoolExecutor}},captionpos=b]
+    result = await loop.run_in_executor(
+        process_pool_executor,
+        execute_task,
+        execution_config,
+        task.task_id
+    )
+\end{lstlisting}
+\vskip 8mm
+
+Но так как время выполнения математических методов при расчёте генерального плана является значительным,
+то необходимо предусмотреть механизм, который позволит завершать расчёт досрочно при необходимости.
+
+Для завершения процессов операционная система использует механизм сигналов. Но если с помощью сигнала
+завершить процесс, созданный экземпляром класс \textit{ProcessPoolExecutor}, то экземпляр больше не сможет
+создавать новые процесс и для продолжения работы будет требоваться создание экземпляра класса заново.
+
+Таким образом данный способ является неприменимым в нашем случае.
+Чтобы корректно работал механизм отмены предлагается запуск задач
+с помощью прямого создания экземпляров класса \textit{multiprocessing.Process}.
+
+\begin{lstlisting}[caption={Пример запуска с использованием \textit{multiprocessing.Process}},captionpos=b]
+async def handle_long_cpu_bound_task(
+        execution_config: ExecutionConfig,
+        task_id: int
+) -> TaskExecutionProcess:
+    args = (
+        execution_config,
+        task_id,
+    )
+    process = Process(
+                   target=execute_long_task,
+                   args=args
+               )
+
+    task_execution_process = TaskExecutionProcess(
+        task_id,
+        process,
+    )
+
+    process.start()
+
+    return task_execution_process
+\end{lstlisting}

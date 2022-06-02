@@ -1,0 +1,55 @@
+\subsubsection{{Сервис запуска математических методов}}
+\addcontentsline{toc}{subsubsection}
+
+Верхнеуровневая архитектура сервиса запуска математических методов представлена на диаграмме компонент
+(см. рисунок \ \ref{pic:architecture__executor-component}).
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{architecture/pictures/executor/component_common}
+	\caption{Верхнеуровневая диаграмма компонент сервиса запуска математических методов}
+	\label{pic:architecture__executor-component}
+\end{figure}
+\vskip 5 mm
+
+Сервис представлен следующими компонентами:
+\begin{enumerate}
+	\item {
+		\textit{API} -- отвечает за предоставление REST API и отправки задачи в очередь.
+	}
+	\item {
+		\textit{Repository} -- отвечает за получение и сохранение данных.
+	}
+	\item {
+		\textit{MathDataMapper} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
+	}
+	\item {
+		\textit{MathExecution} -- отвечает за запуск математических методов в отдельном процессе.
+	}
+\end{enumerate}
+
+Самой технически сложной частью сервиса является компонент, отвечающий за запуск математических методов
+в отдельном процессе. Детальное изображение его компонентов представлено
+на диаграмме ниже (см. рисунок \ \ref{pic:architecture__executor-detailed-component}).
+
+\begin{figure}[H]
+	\includegraphics[width=0.6\textwidth]{architecture/pictures/executor/component_detailed}
+	\caption{Диаграмма компонента запуска математических методов}
+	\label{pic:architecture__executor-detailed-component}
+\end{figure}
+\vskip 5 mm
+
+Компонент запуска математических методов представлен следующими компонентами:
+\begin{enumerate}
+	\item {
+		\textit{MathQueue} -- очередь задач на выполнение.
+	}
+	\item {
+		\textit{MathListener} -- обработчик сообщений из очереди.
+	}
+	\item {
+		\textit{MathHandler} -- отвечает преобразование расчётной модели данных в модель данных математических методик.
+	}
+	\item {
+		\textit{MathExecutor} -- отвечает за запуск математических методов в отдельном процессе.
+	}
+\end{enumerate}
